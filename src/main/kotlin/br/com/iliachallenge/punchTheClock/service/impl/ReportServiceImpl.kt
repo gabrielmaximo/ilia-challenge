@@ -1,6 +1,6 @@
 package br.com.iliachallenge.punchTheClock.service.impl
 
-import br.com.iliachallenge.punchTheClock.dto.SummaryResponseDTO
+import br.com.iliachallenge.punchTheClock.dto.ReportResponseDTO
 import br.com.iliachallenge.punchTheClock.dto.WorkedDayDTO
 import br.com.iliachallenge.punchTheClock.exception.NotFound
 import br.com.iliachallenge.punchTheClock.repository.RegisterRepository
@@ -22,14 +22,14 @@ class ReportServiceImpl(
         val DAILY_JOURNEY: LocalTime = LocalTime.of(8, 0)
     }
 
-    override fun getMonthSummary(inDateRange: YearMonth): SummaryResponseDTO {
+    override fun getMonthSummary(inDateRange: YearMonth): ReportResponseDTO {
         val registers = this.registerRepository.findByDateBetweenOrderByDateAsc(
             LocalDate.of(inDateRange.year, inDateRange.month, 1),
             LocalDate.of(inDateRange.year, inDateRange.month, inDateRange.lengthOfMonth())
 
-        ).orEmpty()
+        )
 
-        if (registers.isEmpty()) throw NotFound("Not found any registers in this month.")
+        if (registers.isNullOrEmpty()) throw NotFound("Not found any registers in this month.")
 
         val registersPerDay = registers.chunked(4)
         val workedDays = registersPerDay.mapIndexed { i, register ->
@@ -46,12 +46,12 @@ class ReportServiceImpl(
         val workedMillisOnMonth = workedHoursPerDay.map { Duration.between(DAILY_JOURNEY, it).toMillis() }
         val duration = Duration.ofMillis(workedMillisOnMonth.sum())
 
-        var missingHours = "0"
-        var overtime = "0"
+        var missingHours: String? = null
+        var overtime: String? = null
 
         if(duration.isNegative) missingHours = duration.format()
         else overtime = duration.format()
 
-        return SummaryResponseDTO(inDateRange, workedHoursOnMonth, missingHours, overtime, workedDays)
+        return ReportResponseDTO(inDateRange, workedHoursOnMonth, missingHours, overtime, workedDays)
     }
 }

@@ -61,12 +61,12 @@ class RegisterServiceImpl(private val registerRepository: RegisterRepository) : 
         val returnTime = moment.toLocalTime()
 
         if (returnTime.isBefore(lunchTime) || returnTime.equals(lunchTime))
-            throw Conflict("Please provide a time later than the lunch time.")
+            throw Conflict("Please provide a time later than the lunchtime.")
 
         val oneHourLater = lunchTime.plusHours(1)
 
         if (returnTime.isBefore(oneHourLater))
-            throw Forbidden("At least one hour of lunch break is required")
+            throw Forbidden("At least one hour of lunch break is required.")
 
         val res = registerRepository.save(
             Register(
