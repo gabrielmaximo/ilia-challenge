@@ -18,6 +18,7 @@ repositories {
 
 val swaggerVersion="1.5.9"
 val hSQLVersion="2.6.0"
+val mockkVersion="1.12.0"
 
 dependencies {
 	runtimeOnly("org.hsqldb:hsqldb:$hSQLVersion")
@@ -33,7 +34,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("io.mockk:mockk:1.12.0")
+	testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
 tasks.withType<KotlinCompile> {
