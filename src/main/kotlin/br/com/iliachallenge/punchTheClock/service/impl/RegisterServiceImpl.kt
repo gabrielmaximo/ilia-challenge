@@ -1,7 +1,7 @@
 package br.com.iliachallenge.punchTheClock.service.impl
 
 import br.com.iliachallenge.punchTheClock.dto.RegisterResponseDTO
-import br.com.iliachallenge.punchTheClock.exception.BadRequest
+import br.com.iliachallenge.punchTheClock.exception.Conflict
 import br.com.iliachallenge.punchTheClock.exception.Forbidden
 import br.com.iliachallenge.punchTheClock.model.Register
 import br.com.iliachallenge.punchTheClock.repository.RegisterRepository
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class RegisterServiceImpl(private val registerRepository: RegisterRepository) : RegisterService {
     override fun create(moment: LocalDateTime): RegisterResponseDTO {
-        val registers = this.registerRepository.findAllByDate(moment.toLocalDate()).orEmpty()
+        val registers = this.registerRepository.findAllByDateOrderByTimeAsc(moment.toLocalDate()).orEmpty()
 
         return when (registers.size) {
             0 -> this.entry(moment)
@@ -45,7 +45,7 @@ class RegisterServiceImpl(private val registerRepository: RegisterRepository) : 
         val lunchTime = moment.toLocalTime()
 
         if (lunchTime.isBefore(entryTime) || lunchTime.equals(entryTime))
-            throw BadRequest("Please provide a time later than the entry time.")
+            throw Conflict("Please provide a time later than the entry time.")
 
         val res = registerRepository.save(
             Register(
@@ -61,7 +61,7 @@ class RegisterServiceImpl(private val registerRepository: RegisterRepository) : 
         val returnTime = moment.toLocalTime()
 
         if (returnTime.isBefore(lunchTime) || returnTime.equals(lunchTime))
-            throw BadRequest("Please provide a time later than the lunch time.")
+            throw Conflict("Please provide a time later than the lunch time.")
 
         val oneHourLater = lunchTime.plusHours(1)
 
@@ -82,7 +82,7 @@ class RegisterServiceImpl(private val registerRepository: RegisterRepository) : 
         val exitTime = moment.toLocalTime()
 
         if (exitTime.isBefore(returnTime) || exitTime.equals(returnTime))
-            throw BadRequest("Please provide a time later than the return time.")
+            throw Conflict("Please provide a time later than the return time.")
 
         val res = registerRepository.save(
             Register(

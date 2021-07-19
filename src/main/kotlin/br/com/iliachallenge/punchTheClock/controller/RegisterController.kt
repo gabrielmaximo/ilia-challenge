@@ -17,6 +17,7 @@ class RegisterController(
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun createRegister(@RequestBody requestDTO: RegisterRequestDTO): RegisterResponseDTO =
-        registerService.create(requestDTO.moment)
+    fun createRegister(@RequestBody requestDTO: RegisterRequestDTO): RegisterResponseDTO {
+        return registerService.create(requestDTO.moment)
+    }
 }

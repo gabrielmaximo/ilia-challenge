@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/summary")
+@RequestMapping("/report")
 class SummaryController(private val reportService: ReportService) {
     @GetMapping("/{yearMonth}")
     fun show(@PathVariable yearMonth: YearMonth) = reportService.getMonthSummary(yearMonth)

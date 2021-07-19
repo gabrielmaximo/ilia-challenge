@@ -20,6 +20,8 @@ val swaggerVersion="1.5.9"
 val hSQLVersion="2.6.0"
 
 dependencies {
+	runtimeOnly("org.hsqldb:hsqldb:$hSQLVersion")
+
 	implementation("org.springdoc:springdoc-openapi-kotlin:$swaggerVersion")
 	implementation("org.springdoc:springdoc-openapi-ui:$swaggerVersion")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -29,8 +31,9 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	runtimeOnly("org.hsqldb:hsqldb:$hSQLVersion")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("io.mockk:mockk:1.12.0")
 }
 
 tasks.withType<KotlinCompile> {

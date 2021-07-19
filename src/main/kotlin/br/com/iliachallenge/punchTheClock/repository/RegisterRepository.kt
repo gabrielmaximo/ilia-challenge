@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RegisterRepository : CrudRepository<Register, Long> {
-    fun findAllByDate(date: LocalDate): List<Register>?
+    fun findAllByDateOrderByTimeAsc(date: LocalDate): List<Register>?
 
     fun findByDateBetweenOrderByDateAsc(startDate: LocalDate, endDate: LocalDate): List<Register>?
 }
